@@ -1,48 +1,74 @@
 import axios from 'axios';
 import React, { useRef, useState } from 'react'
-import { Button, Card, Container, Form } from 'react-bootstrap'
+import { Button, Card, Container, Form } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const SignUp = () => {
 
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
-    const [showLogin,setShowLogin] = useState(false);
+    const [showLogin,setShowLogin] = useState(true);
     const [forgotPass,setForgotPass] = useState(false);
+    const history = useHistory();
 
 
     const submitHandler=async(e)=>{
         e.preventDefault();
         const email=emailRef.current.value;
         const password=passwordRef.current.value;
-        const conPassword = confirmPasswordRef.current.value;
-        if(password===conPassword)
-        {
-            try{
-                const res = axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDT2oWEwWPILmEgFzfUeGLV6LTdGItFlGo',
-                { email:email,
-                    password:password,
-                    returnSecureToken: true});
-                    
-                    
-                        console.log('successfully signed up');
-                   
-                 
+        
+        if(!showLogin) //Sign Up code
+        { const conPassword = confirmPasswordRef.current.value;
+            if(password===conPassword)
+            {
+                try{
+                    const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDT2oWEwWPILmEgFzfUeGLV6LTdGItFlGo',
+                    { email:email,
+                        password:password,
+                        returnSecureToken: true});                    
+                       
+                        
+                            console.log('successfully signed up');
+                        history.replace('/home');
+                            
+                       
+                     
+                }
+               catch(err){
+                    console.log(err);
+               }
+               
+               emailRef.current.value='';
+              passwordRef.current.value='';
+               confirmPasswordRef.current.value='';
+            }else{
+                console.log('passwords dont match');
             }
-           catch(err){
-                console.log(err);
-           }
-           
-           emailRef.current.value='';
-          passwordRef.current.value='';
-           confirmPasswordRef.current.value='';
+        }else // Login Code
+       {
+        try{
+           const res= await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDT2oWEwWPILmEgFzfUeGLV6LTdGItFlGo',
+            {email:email,
+                password:password,
+                returnSecureToken: true})
+                localStorage.setItem('token',res.data.idToken);
+                console.log('loggedin succesfully');
+                history.replace('/home');
+
+        } catch(err){
+            alert(err);
         }
+        emailRef.current.value='';
+        passwordRef.current.value='';
+        
+       }
     }
 
   return (
     <Container className='mt-5 d-flex flex-column justify-content-center align-items-center m-auto'>
       {!forgotPass ?  <Card>
-        <Card.Title className='d-flex mt-2 align-center m-auto'>Sign Up</Card.Title>
+        <Card.Title className='d-flex mt-2 align-center m-auto'>{!showLogin ? 'Sign Up' : 'Log In'}</Card.Title>
             <Card.Body>
     <Form onSubmit={submitHandler}>
          <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -69,10 +95,10 @@ const SignUp = () => {
     </Form>
     </Card.Body>
     {!showLogin && <Card.Footer>
-      Already have an account? <span style={{color:'blue',cursor:'pointer'}} >Login</span>
+      Already have an account? <span style={{color:'blue',cursor:'pointer'}} onClick={()=>setShowLogin(!showLogin)} >Login</span>
       </Card.Footer>}
       {showLogin && <Card.Footer>
-      Already have an account? <span style={{color:'blue',cursor:'pointer'}} >SignUp</span>
+      Already have an account? <span style={{color:'blue',cursor:'pointer'}} onClick={()=>setShowLogin(!showLogin) }>SignUp</span>
       </Card.Footer>}
     </Card>
    : 
