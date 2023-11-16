@@ -7,6 +7,7 @@ import SignUp from './components/SignUp';
 import Home from './components/Home';
 import { Switch } from 'react-router-dom/cjs/react-router-dom.min';
 import { Route } from 'react-router-dom/cjs/react-router-dom';
+import ComposeMail from './components/ComposeMail';
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
     </Route>
     <Route path='/home'>
     <Home/>
+    </Route>
+    <Route path='/compose'>
+      <ComposeMail/>
     </Route>
       </Switch>
     

@@ -27,7 +27,7 @@ const SignUp = () => {
                     { email:email,
                         password:password,
                         returnSecureToken: true});                    
-                       
+                       localStorage.setItem('email',email);
                         
                             console.log('successfully signed up');
                         history.replace('/home');
@@ -53,6 +53,7 @@ const SignUp = () => {
                 password:password,
                 returnSecureToken: true})
                 localStorage.setItem('token',res.data.idToken);
+                localStorage.setItem('email',email);
                 console.log('loggedin succesfully');
                 history.replace('/home');
 
