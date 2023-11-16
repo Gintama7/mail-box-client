@@ -21,11 +21,21 @@ e.preventDefault();
                 changedMail+= usermail[i];
             }
         }
+        let loggedMail ='';
+        for(let i=0;i<email.length;i++)
+        {
+            if(email[i]!== '@' && email[i]!=='.')
+            {
+                loggedMail+= email[i];
+            }
+        }
         try{
            const res = await axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${changedMail}/incoming.json`,
         {id:subject,from:email,subject:subject,message:mailBody});
 
-        console.log('email sent'); 
+        console.log('email sent');
+        axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${loggedMail}/sent.json`,
+        {id:subject,to:usermail,subject:subject,message:mailBody});
         }catch(err)
         {
             alert(err);
