@@ -48,7 +48,7 @@ e.preventDefault();
 
   return (
    <Container className='d-flex flex-column'>
-    <Card>
+    <Card lg={8}>
         <Card.Body>
     <Form>
     <Form.Group className="mb-3" controlId="formBasicEmail">
