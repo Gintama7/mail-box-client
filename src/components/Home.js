@@ -1,9 +1,13 @@
 import React from 'react'
-import { Button, Col, Container, Nav, Row, Tab } from 'react-bootstrap';
+import { Badge, Button, Col, Container, Nav, Row, Tab } from 'react-bootstrap';
 import Inbox from './Inbox';
 import SentMail from './SentMail';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
+
+const unreadNum = useSelector(state=> state.mail.unread);
+
   return (
     <Container className='d-flex flex-column align-items-center mt-5 justify-content-center'>
       <h2>Welcome to Your Mail Box</h2> 
@@ -17,7 +21,7 @@ const Home = () => {
           </div>         
           <Nav variant="pills" className="flex-column">
             <Nav.Item>
-              <Nav.Link eventKey="first">Inbox</Nav.Link>
+              <Nav.Link eventKey="first">Inbox <Badge bg='info'>{unreadNum}</Badge></Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="second">Sent</Nav.Link>

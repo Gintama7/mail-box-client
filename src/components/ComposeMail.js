@@ -4,28 +4,30 @@ import { Button, Card, Container, Form } from 'react-bootstrap';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const ComposeMail = () => {
     const [usermail,setUserMail] = useState('');
     const [subject, setSubject] = useState('');
     const [mailBody, setMailBody] = useState('');
-    const userMail = useSelector(state=> state.auth.email);
+    const loggedMail= useSelector(state=> state.auth.email);
+    const history = useHistory();
 
     const sendHandler=async(e)=>{
-        const email= localStorage.getItem('email');
+       
 e.preventDefault();
     
-        let loggedMail ='';
-        for(let i=0;i<email.length;i++)
+        let sendingMail ='';
+        for(let i=0;i<usermail.length;i++)
         {
-            if(email[i]!== '@' && email[i]!=='.')
+            if(usermail[i]!== '@' && usermail[i]!=='.')
             {
-                loggedMail+= email[i];
+                sendingMail+= usermail[i];
             }
         }
         try{
-           const res = await axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${userMail}/incoming.json`,
-        {id:subject,from:email,subject:subject,message:mailBody});
+           const res = await axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${sendingMail}/incoming.json`,
+        {id:subject,from:loggedMail,subject:subject,message:mailBody});
 
         console.log('email sent');
         axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${loggedMail}/sent.json`,
@@ -38,6 +40,7 @@ e.preventDefault();
         setUserMail('');
         setSubject('');
         setMailBody('');
+        history.replace('/home');
     }
 
   return (

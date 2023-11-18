@@ -9,7 +9,7 @@ const SentMail = () => {
     <Container>
         <ListGroup>
            { sentMail.map((item)=>(
-                <ListGroup.Item key={item.id}>{item.from} {item.message}</ListGroup.Item>
+                <ListGroup.Item key={item.id}>{item.to} {item.subject} {item.message}</ListGroup.Item>
             ))}
         </ListGroup>
     </Container>
