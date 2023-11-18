@@ -5,8 +5,11 @@ const mailSlice = createSlice({
     name:'mail',
     initialState:{inbox:[],sent:[],unread:0,},
     reducers:{
-        addMail(state,action){
+        addMailToInbox(state,action){
             state.inbox.push(action.payload);
+        },
+        addMailToSent(state,action){
+            state.sent.push(action.payload);
         },
         removeMail(state,action){
             

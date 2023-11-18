@@ -3,24 +3,18 @@ import React, { useState } from 'react'
 import { Button, Card, Container, Form } from 'react-bootstrap';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { useSelector } from 'react-redux';
 
 const ComposeMail = () => {
     const [usermail,setUserMail] = useState('');
     const [subject, setSubject] = useState('');
     const [mailBody, setMailBody] = useState('');
-
+    const userMail = useSelector(state=> state.auth.email);
 
     const sendHandler=async(e)=>{
         const email= localStorage.getItem('email');
 e.preventDefault();
-        let changedMail = '';
-        for(let i=0;i<usermail.length;i++)
-        {
-            if(usermail[i]!== '@' && usermail[i]!=='.')
-            {
-                changedMail+= usermail[i];
-            }
-        }
+    
         let loggedMail ='';
         for(let i=0;i<email.length;i++)
         {
@@ -30,7 +24,7 @@ e.preventDefault();
             }
         }
         try{
-           const res = await axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${changedMail}/incoming.json`,
+           const res = await axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${userMail}/incoming.json`,
         {id:subject,from:email,subject:subject,message:mailBody});
 
         console.log('email sent');

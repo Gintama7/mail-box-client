@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useRef, useState } from 'react'
 import { Button, Card, Container, Form } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { authActions } from '../store/auth-slice';
 
 const SignUp = () => {
 
@@ -11,12 +13,22 @@ const SignUp = () => {
     const [showLogin,setShowLogin] = useState(true);
     const [forgotPass,setForgotPass] = useState(false);
     const history = useHistory();
+    const dispatch = useDispatch();
 
 
     const submitHandler=async(e)=>{
         e.preventDefault();
         const email=emailRef.current.value;
         const password=passwordRef.current.value;
+
+        let changedMail = '';
+        for(let i=0;i<email.length;i++)
+        {
+            if(email[i]!== '@' && email[i]!=='.')
+            {
+                changedMail+= email[i];
+            }
+        }
         
         if(!showLogin) //Sign Up code
         { const conPassword = confirmPasswordRef.current.value;
@@ -27,7 +39,7 @@ const SignUp = () => {
                     { email:email,
                         password:password,
                         returnSecureToken: true});                    
-                       localStorage.setItem('email',email);
+                       dispatch(authActions.login({token:res.data.idToken,email:changedMail}))
                         
                             console.log('successfully signed up');
                         history.replace('/home');
@@ -52,8 +64,7 @@ const SignUp = () => {
             {email:email,
                 password:password,
                 returnSecureToken: true})
-                localStorage.setItem('token',res.data.idToken);
-                localStorage.setItem('email',email);
+                dispatch(authActions.login({token:res.data.idToken,email:changedMail}))
                 console.log('loggedin succesfully');
                 history.replace('/home');
 

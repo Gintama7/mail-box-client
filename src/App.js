@@ -11,10 +11,13 @@ import ComposeMail from './components/ComposeMail';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from './store/auth-slice';
+import axios from 'axios';
+import { mailActions } from './store/mail-slice';
 
 function App() {
   const isLoggedIn = useSelector((state)=> state.auth.isAuthenticated);
   const dispatch = useDispatch();
+
 
   useEffect(()=>{
     const token = localStorage.getItem('token');
@@ -22,8 +25,28 @@ function App() {
     if(token)
     {
       dispatch(authActions.login({token,email}));
+      axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/incoming.json`)
+        .then((res)=>{
+            const data =res.data;
+            for(const key in data){
+                if (data.hasOwnProperty(key)) {
+                 dispatch(mailActions.addMailToInbox(data[key]));
+                  
+                }
+              }
+        })
+        axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/sent.json`)
+        .then((res)=>{
+            const data =res.data;
+            for(const key in data){
+                if (data.hasOwnProperty(key)) {
+                 dispatch(mailActions.addMailToSent(data[key]));
+                  
+                }
+              }
+        })
     }
-  },[])
+  },[dispatch])
 
   return (
     <Layout>
@@ -31,12 +54,12 @@ function App() {
     <Route path='/' exact>
 <SignUp/>
     </Route>
-    <Route path='/home'>
+    {isLoggedIn && <Route path='/home'>
     <Home/>
-    </Route>
-    <Route path='/compose'>
+    </Route>}
+   {isLoggedIn && <Route path='/compose'>
       <ComposeMail/>
-    </Route>
+    </Route>}
       </Switch>
     
     </Layout>

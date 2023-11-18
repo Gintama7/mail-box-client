@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Col, Container, Nav, Row, Tab } from 'react-bootstrap';
 import Inbox from './Inbox';
+import SentMail from './SentMail';
 
 const Home = () => {
   return (
@@ -26,7 +27,7 @@ const Home = () => {
         <Col sm={9}>
           <Tab.Content>
             <Tab.Pane eventKey="first"><Inbox/></Tab.Pane>
-            <Tab.Pane eventKey="second">Second tab content</Tab.Pane>
+            <Tab.Pane eventKey="second"><SentMail/></Tab.Pane>
           </Tab.Content>
         </Col>
       </Row>
