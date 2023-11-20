@@ -17,8 +17,10 @@ const mailSlice = createSlice({
         },
         readMail(state)
         {
-            state.unread-=1;
+            if(state.unread>=0)
+           { state.unread-=1;
             state.read=true;
+           }
         }
     }
 })
