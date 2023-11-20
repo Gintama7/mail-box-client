@@ -13,6 +13,14 @@ const mailSlice = createSlice({
             state.sent.push(action.payload);
         },
         removeMail(state,action){
+            const {id,type}= action.payload;
+            // const item = state.inbox.find( itm => itm.id === id);  
+            if(type === 'inbox'){
+                state.inbox = state.inbox.filter(itm=> itm.id !== id );
+            }
+            else{
+                state.sent = state.sent.filter(itm=> itm.id !== id );
+            }
             
         },
         readMail(state)

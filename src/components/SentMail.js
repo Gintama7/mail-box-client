@@ -1,17 +1,50 @@
-import React from 'react'
-import { Container, ListGroup } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
+import axios from 'axios';
+import React, { useState } from 'react'
+import { Button, Container, ListGroup } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { mailActions } from '../store/mail-slice';
+import SentMessage from './SentMessage';
 
 const SentMail = () => {
     const sentMail = useSelector(state => state.mail.sent);
+    const dispatch =useDispatch();
+    const email = useSelector(state=> state.auth.email);
+    const [showEmail,setShowEmail] = useState(false);
+    const [itemId,setItemId] = useState('');
+
+    const delHandler=async(id)=>{
+      let dataPoint ='';
+      const res = await axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/sent.json`);
+      const data = res.data;
+      for(const key in data){
+        
+          if(data[key].id === id)
+          {
+            dataPoint=key;
+          }        
+      }
+      axios.delete(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/sent/${dataPoint}.json`)
+      .then(res=>{
+        console.log('deleted');
+        dispatch(mailActions.removeMail({id:id,type:'sent'}));
+      })
+    }
+
+    const openHandler=(id)=>{
+      setItemId(id);
+      setShowEmail(true);
+    }
 
   return (
     <Container>
-        <ListGroup>
+       {!showEmail ? <ListGroup>
            { sentMail.map((item)=>(
-                <ListGroup.Item key={item.id}>{item.to} {item.subject} {item.message}</ListGroup.Item>
+                <ListGroup.Item key={item.id}>{item.to} {item.subject} {item.message} 
+                <Button variant='danger' onClick={()=>delHandler(item.id)}>Delete</Button>
+                <Button  onClick={()=>openHandler(item.id)}>Read Mail</Button>
+                </ListGroup.Item>
             ))}
-        </ListGroup>
+        </ListGroup> : <SentMessage id={itemId} hide={setShowEmail}/>}
     </Container>
   )
 }
