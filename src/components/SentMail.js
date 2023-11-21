@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { Button, Container, ListGroup } from 'react-bootstrap'
+import { Badge, Button, Container, ListGroup } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { mailActions } from '../store/mail-slice';
 import SentMessage from './SentMessage';
@@ -31,15 +31,19 @@ const SentMail = () => {
     }
 
     const openHandler=(id)=>{
+      dispatch(mailActions.readMail({id:id,type:'sent'}));
       setItemId(id);
       setShowEmail(true);
+
     }
 
   return (
     <Container>
        {!showEmail ? <ListGroup>
            { sentMail.map((item)=>(
-                <ListGroup.Item key={item.id}>{item.to} {item.subject} {item.message} 
+                <ListGroup.Item key={item.id}>
+                  {!item.read && <Badge> </Badge>}
+                  {item.to} {item.subject} {item.message} 
                 <Button variant='danger' onClick={()=>delHandler(item.id)}>Delete</Button>
                 <Button  onClick={()=>openHandler(item.id)}>Read Mail</Button>
                 </ListGroup.Item>

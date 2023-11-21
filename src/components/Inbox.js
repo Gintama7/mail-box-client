@@ -8,15 +8,14 @@ import axios from 'axios';
 
 const Inbox = () => {
     const incomingMail = useSelector(state => state.mail.inbox);
-  //  const readMail = useSelector(state=>state.mail.unread);
-   const isRead = useSelector(state=> state.mail.read);
+  //  const readMail = useSelector(state=>state.mail.unread); 
    const dispatch = useDispatch();
    const [showMessage, setShowMessage] = useState(false);
    const [itemId,setItemId] = useState('');
    const email = useSelector(state=> state.auth.email);
 
     const inboxHandler=(id)=>{
-      dispatch(mailActions.readMail());
+      dispatch(mailActions.readMail({id:id,type:'inbox'}));
       setShowMessage(true);  
       setItemId(id)  ;
     }
@@ -44,7 +43,7 @@ const Inbox = () => {
         {!showMessage ? <ListGroup>
            { incomingMail.map((item)=>(
                 <ListGroup.Item key={item.id} >
-                   {!isRead && <Badge> </Badge>}
+                   {!item.read && <Badge> </Badge>}
                     {item.from} {item.subject} {item.message}
                  <Button variant='danger' onClick={()=>delHandler(item.id)}>Delete</Button>
                  <Button onClick={()=>inboxHandler(item.id)}>Open Mail</Button></ListGroup.Item>

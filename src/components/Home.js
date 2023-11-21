@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 
 const Home = () => {
 
-const unreadNum = useSelector(state=> state.mail.unread);
+const unreadIn = useSelector(state=> state.mail.unreadInbox);
+const unreadOut = useSelector(state=> state.mail.unreadSent);
 
   return (
     <Container className='d-flex flex-column align-items-center mt-5 justify-content-center'>
@@ -21,10 +22,10 @@ const unreadNum = useSelector(state=> state.mail.unread);
           </div>         
           <Nav variant="pills" className="flex-column">
             <Nav.Item>
-              <Nav.Link eventKey="first">Inbox <Badge bg='info'>{unreadNum}</Badge></Nav.Link>
+              <Nav.Link eventKey="first">Inbox <Badge bg='info'>{unreadIn}</Badge></Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="second">Sent</Nav.Link>
+              <Nav.Link eventKey="second">Sent <Badge bg='info'>{unreadOut}</Badge></Nav.Link>
             </Nav.Item>
           </Nav>
         </Col>
