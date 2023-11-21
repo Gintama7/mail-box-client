@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react'
-import { Badge, Button, Container, ListGroup } from 'react-bootstrap';
+import { Badge, Button, ButtonGroup, Container, ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { mailActions } from '../store/mail-slice';
 import Message from './Message';
@@ -13,11 +13,29 @@ const Inbox = () => {
    const [showMessage, setShowMessage] = useState(false);
    const [itemId,setItemId] = useState('');
    const email = useSelector(state=> state.auth.email);
+   const unreadIn= useSelector(state=>state.mail.unreadInbox);
 
-    const inboxHandler=(id)=>{
+    const inboxHandler=async(id)=>{
       dispatch(mailActions.readMail({id:id,type:'inbox'}));
+      let dataPoint ='';
+      let obj='';
+      const res = await axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/incoming.json`);
+      const data = res.data;
+      for(const key in data){
+        
+          if(data[key].id === id)
+          {
+            obj = data[key];
+            dataPoint=key;
+          }        
+      }
+      axios.put(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/incoming/${dataPoint}.json`,
+      {...obj,read:true,unread:Number(unreadIn-1)})
+      .then((res)=>{
+        console.log('read successfull');
+      })
       setShowMessage(true);  
-      setItemId(id)  ;
+      setItemId(id);
     }
 
     const delHandler = async(id)=>{
@@ -42,11 +60,12 @@ const Inbox = () => {
     <Container>
         {!showMessage ? <ListGroup>
            { incomingMail.map((item)=>(
-                <ListGroup.Item key={item.id} >
+                <ListGroup.Item key={item.id} className='d-flex align-items-center justify-content-between' >
                    {!item.read && <Badge> </Badge>}
                     {item.from} {item.subject} {item.message}
+                    <ButtonGroup>
                  <Button variant='danger' onClick={()=>delHandler(item.id)}>Delete</Button>
-                 <Button onClick={()=>inboxHandler(item.id)}>Open Mail</Button></ListGroup.Item>
+                 <Button onClick={()=>inboxHandler(item.id)}>Open Mail</Button></ButtonGroup></ListGroup.Item>
             ))}
         </ListGroup> : <Message id ={itemId} hide={setShowMessage}/>}
        

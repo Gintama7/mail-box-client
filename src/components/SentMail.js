@@ -30,8 +30,25 @@ const SentMail = () => {
       })
     }
 
-    const openHandler=(id)=>{
+    const openHandler=async(id)=>{
       dispatch(mailActions.readMail({id:id,type:'sent'}));
+      let dataPoint ='';
+      let obj='';
+      const res = await axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/sent.json`);
+      const data = res.data;
+      for(const key in data){
+        
+          if(data[key].id === id)
+          {
+            obj = data[key];
+            dataPoint=key;
+          }        
+      }
+      axios.put(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/sent/${dataPoint}.json`,
+      {...obj,read:true})
+      .then((res)=>{
+        console.log('read successfull');
+      })
       setItemId(id);
       setShowEmail(true);
 

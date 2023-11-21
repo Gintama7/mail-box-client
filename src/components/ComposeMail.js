@@ -14,6 +14,8 @@ const ComposeMail = () => {
     const loggedMail= useSelector(state=> state.auth.email);
     const history = useHistory();
     const dispatch = useDispatch();
+    const unreadIn= useSelector(state=>state.mail.unreadInbox);
+    const unreadOut= useSelector(state=>state.mail.unreadSent);
 
     const sendHandler=async(e)=>{
        

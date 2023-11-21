@@ -7,15 +7,16 @@ const mailSlice = createSlice({
     reducers:{
         addMailToInbox(state,action){
             state.inbox.push(action.payload);
-            state.unreadInbox+=1;
+            if(!action.payload.read)
+          {  state.unreadInbox+=1;}
         },
         addMailToSent(state,action){
             state.sent.push(action.payload);
-            state.unreadSent+=1;
+            if(!action.payload.read)
+          {  state.unreadSent+=1;}
         },
         removeMail(state,action){
             const {id,type}= action.payload;
-            // const item = state.inbox.find( itm => itm.id === id);  
             if(type === 'inbox'){
                 state.inbox = state.inbox.filter(itm=> itm.id !== id );
             }
