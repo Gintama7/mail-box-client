@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { mailActions } from '../store/mail-slice';
 import Message from './Message';
 import axios from 'axios';
+import './Inbox.css';
 
 const Inbox = () => {
     const incomingMail = useSelector(state => state.mail.inbox);
@@ -61,8 +62,9 @@ const Inbox = () => {
         {!showMessage ? <ListGroup>
            { incomingMail.map((item)=>(
                 <ListGroup.Item key={item.id} className='d-flex align-items-center justify-content-between' >
-                   {!item.read && <Badge> </Badge>}
-                    {item.from} {item.subject} {item.message}
+                  <span className='front'>
+                {!item.read && <Badge> </Badge>}
+                {item.from}  {item.subject} <span className='message'> -{item.message}</span></span>
                     <ButtonGroup>
                  <Button variant='danger' onClick={()=>delHandler(item.id)}>Delete</Button>
                  <Button onClick={()=>inboxHandler(item.id)}>Open Mail</Button></ButtonGroup></ListGroup.Item>

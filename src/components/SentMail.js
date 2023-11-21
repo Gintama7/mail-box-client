@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { Badge, Button, Container, ListGroup } from 'react-bootstrap'
+import { Badge, Button, ButtonGroup, Container, ListGroup } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { mailActions } from '../store/mail-slice';
 import SentMessage from './SentMessage';
+import './Inbox.css';
 
 const SentMail = () => {
     const sentMail = useSelector(state => state.mail.sent);
@@ -58,11 +59,12 @@ const SentMail = () => {
     <Container>
        {!showEmail ? <ListGroup>
            { sentMail.map((item)=>(
-                <ListGroup.Item key={item.id}>
-                  {!item.read && <Badge> </Badge>}
-                  {item.to} {item.subject} {item.message} 
+                <ListGroup.Item key={item.id} className='d-flex align-items-center justify-content-between'>
+               <span className='front'>   {!item.read && <Badge style={{marginRight:'5px'}}> </Badge>}
+                  {item.to} {item.subject} <span className='message'>- {item.message}</span> </span>
+                  <ButtonGroup>
                 <Button variant='danger' onClick={()=>delHandler(item.id)}>Delete</Button>
-                <Button  onClick={()=>openHandler(item.id)}>Read Mail</Button>
+                <Button  onClick={()=>openHandler(item.id)}>Read Mail</Button></ButtonGroup>
                 </ListGroup.Item>
             ))}
         </ListGroup> : <SentMessage id={itemId} hide={setShowEmail}/>}
