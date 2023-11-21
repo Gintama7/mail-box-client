@@ -1,15 +1,16 @@
 import React from 'react'
 import {  Button, Container, Nav, Navbar } from 'react-bootstrap'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { authActions } from '../store/auth-slice';
 
 
 const SiteNavbar = () => {
   const isLoggedIn = useSelector((state)=> state.auth.isAuthenticated);
   const history = useHistory();
+  const dispatch = useDispatch();
   const logOutHandler=()=>{
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
+    dispatch(authActions.logout());
     history.replace('/');
   }
 

@@ -33,7 +33,7 @@ e.preventDefault();
            const res = await axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${sendingMail}/incoming.json`,
         {id:subject,from:loggedMail,subject:subject,message:mailBody,read:false});
 
-        dispatch(mailActions.addMailToInbox({id:subject,from:loggedMail,subject:subject,message:mailBody,read:false}));
+        
 
         console.log('email sent');
         axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${loggedMail}/sent.json`,

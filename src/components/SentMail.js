@@ -61,7 +61,7 @@ const SentMail = () => {
            { sentMail.map((item)=>(
                 <ListGroup.Item key={item.id} className='d-flex align-items-center justify-content-between'>
                <span className='front'>   {!item.read && <Badge style={{marginRight:'5px'}}> </Badge>}
-                  {item.to} {item.subject} <span className='message'>- {item.message}</span> </span>
+                  {item.to} - {item.subject} <span className='message'>- {item.message}</span> </span>
                   <ButtonGroup>
                 <Button variant='danger' onClick={()=>delHandler(item.id)}>Delete</Button>
                 <Button  onClick={()=>openHandler(item.id)}>Read Mail</Button></ButtonGroup>

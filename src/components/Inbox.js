@@ -31,7 +31,7 @@ const Inbox = () => {
           }        
       }
       axios.put(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/incoming/${dataPoint}.json`,
-      {...obj,read:true,unread:Number(unreadIn-1)})
+      {...obj,read:true})
       .then((res)=>{
         console.log('read successfull');
       })
@@ -64,7 +64,7 @@ const Inbox = () => {
                 <ListGroup.Item key={item.id} className='d-flex align-items-center justify-content-between' >
                   <span className='front'>
                 {!item.read && <Badge> </Badge>}
-                {item.from}  {item.subject} <span className='message'> -{item.message}</span></span>
+                {item.from} - {item.subject} <span className='message'> -{item.message}</span></span>
                     <ButtonGroup>
                  <Button variant='danger' onClick={()=>delHandler(item.id)}>Delete</Button>
                  <Button onClick={()=>inboxHandler(item.id)}>Open Mail</Button></ButtonGroup></ListGroup.Item>

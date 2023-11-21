@@ -18,24 +18,23 @@ function App() {
   const isLoggedIn = useSelector((state)=> state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
-
   useEffect(()=>{
     const token = localStorage.getItem('token');
     const email = localStorage.getItem('email');
     if(token)
-    {
-      dispatch(authActions.login({token,email}));
-      axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/incoming.json`)
-        .then((res)=>{
-            const data =res.data;
-            for(const key in data){
-                if (data.hasOwnProperty(key)) {
-                 dispatch(mailActions.addMailToInbox(data[key]));
-                  
-                }
+    {  dispatch(authActions.login({token,email}));
+    axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/incoming.json`)
+      .then((res)=>{
+          const data =res.data;
+          for(const key in data){
+              if (data.hasOwnProperty(key)) {
+               dispatch(mailActions.addMailToInbox(data[key]));
+                
               }
-        })
-        axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/sent.json`)
+            }
+      })
+
+      axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/sent.json`)
         .then((res)=>{
             const data =res.data;
             for(const key in data){
@@ -46,7 +45,7 @@ function App() {
               }
         })
     }
-  },[dispatch])
+  },[])
 
   return (
     <Layout>

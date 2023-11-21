@@ -19,9 +19,11 @@ const mailSlice = createSlice({
             const {id,type}= action.payload;
             if(type === 'inbox'){
                 state.inbox = state.inbox.filter(itm=> itm.id !== id );
+                state.unreadInbox-=1;
             }
             else{
                 state.sent = state.sent.filter(itm=> itm.id !== id );
+                state.unreadSent-=1;
             }
             
         },
