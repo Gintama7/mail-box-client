@@ -18,12 +18,18 @@ const mailSlice = createSlice({
         removeMail(state,action){
             const {id,type}= action.payload;
             if(type === 'inbox'){
-                state.inbox = state.inbox.filter(itm=> itm.id !== id );
-                state.unreadInbox-=1;
+                
+                const item = state.inbox.find( itm => itm.id === id);
+                if(!item.read)
+               { state.unreadInbox-=1;}
+               state.inbox = state.inbox.filter(itm=> itm.id !== id );
             }
             else{
-                state.sent = state.sent.filter(itm=> itm.id !== id );
-                state.unreadSent-=1;
+                
+                const item = state.sent.find( itm => itm.id === id);
+                if(!item.read)
+               { state.unreadSent-=1;}
+               state.sent = state.sent.filter(itm=> itm.id !== id );
             }
             
         },

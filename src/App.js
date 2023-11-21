@@ -11,8 +11,7 @@ import ComposeMail from './components/ComposeMail';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from './store/auth-slice';
-import axios from 'axios';
-import { mailActions } from './store/mail-slice';
+
 
 function App() {
   const isLoggedIn = useSelector((state)=> state.auth.isAuthenticated);
@@ -22,28 +21,8 @@ function App() {
     const token = localStorage.getItem('token');
     const email = localStorage.getItem('email');
     if(token)
-    {  dispatch(authActions.login({token,email}));
-    axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/incoming.json`)
-      .then((res)=>{
-          const data =res.data;
-          for(const key in data){
-              if (data.hasOwnProperty(key)) {
-               dispatch(mailActions.addMailToInbox(data[key]));
-                
-              }
-            }
-      })
+    {  dispatch(authActions.login({token,email}));   
 
-      axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/sent.json`)
-        .then((res)=>{
-            const data =res.data;
-            for(const key in data){
-                if (data.hasOwnProperty(key)) {
-                 dispatch(mailActions.addMailToSent(data[key]));
-                  
-                }
-              }
-        })
     }
   },[])
 

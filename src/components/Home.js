@@ -1,13 +1,40 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Badge, Button, Col, Container, Nav, Row, Tab } from 'react-bootstrap';
 import Inbox from './Inbox';
 import SentMail from './SentMail';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { mailActions } from '../store/mail-slice';
 
 const Home = () => {
 
 const unreadIn = useSelector(state=> state.mail.unreadInbox);
 const unreadOut = useSelector(state=> state.mail.unreadSent);
+const email = useSelector(state=>state.auth.email);
+const dispatch = useDispatch();
+
+useEffect(()=>{
+  axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/incoming.json`)
+  .then((res)=>{
+      const data =res.data;
+      for(const key in data){
+          
+           dispatch(mailActions.addMailToInbox(data[key]));
+            
+        
+        }
+        axios.get(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${email}/sent.json`)
+    .then((res)=>{
+        const data =res.data;
+        for(const key in data){
+           
+             dispatch(mailActions.addMailToSent(data[key]));
+              
+            
+          }
+    })
+  })
+},[])
 
   return (
     <Container className='d-flex flex-column align-items-center mt-5 justify-content-center'>
