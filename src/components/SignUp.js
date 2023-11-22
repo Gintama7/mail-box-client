@@ -21,6 +21,8 @@ const SignUp = () => {
         const email=emailRef.current.value;
         const password=passwordRef.current.value;
 
+        localStorage.setItem('mailTwo',email);
+
         let changedMail = '';
         for(let i=0;i<email.length;i++)
         {

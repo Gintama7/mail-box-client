@@ -13,6 +13,7 @@ const ComposeMail = () => {
     const [subject, setSubject] = useState('');
     const [mailBody, setMailBody] = useState('');
     const loggedMail= useSelector(state=> state.auth.email);
+    
     const history = useHistory();
     const dispatch = useDispatch();
     // const editor = useRef(null);
@@ -21,7 +22,7 @@ const ComposeMail = () => {
        
 e.preventDefault();
 const plaintext = Jodit.modules.Helpers.stripTags(mailBody);
-
+const secondMail = localStorage.getItem('mailTwo');
     
         let sendingMail ='';
         for(let i=0;i<usermail.length;i++)
@@ -33,7 +34,7 @@ const plaintext = Jodit.modules.Helpers.stripTags(mailBody);
         }
         try{
            const res = await axios.post(`https://mail-box-client-39877-default-rtdb.firebaseio.com/emails/${sendingMail}/incoming.json`,
-        {id:subject,from:loggedMail,subject:subject,message:plaintext,read:false});
+        {id:subject,from:secondMail,subject:subject,message:plaintext,read:false});
 
         
 
